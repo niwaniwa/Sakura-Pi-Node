@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/niwaniwa/Project-Sakura/main/Assets/icon.png" alt="Misskey logo" style="border-radius:50%" width="400"/>
+<img src="https://raw.githubusercontent.com/niwaniwa/Project-Sakura/main/Assets/icon.png" alt="Sakura logo" width="400"/>
 
 ** 🔑🌸🔑 [Sakura](https://github.com/niwaniwa/Project-Sakura) is a simple access control system. **
 
