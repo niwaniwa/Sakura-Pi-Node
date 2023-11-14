@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func initializeApiServer() {
+func InitializeApiServer() {
 	router := gin.Default()
 	router.GET("/Key", getKeyState)
 	router.POST("/Key", postKeyState)

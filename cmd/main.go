@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Sakura-Hardware/pkg/api"
 	"Sakura-Hardware/pkg/config"
 	"Sakura-Hardware/pkg/device"
 	"log"
@@ -11,6 +12,7 @@ func main() {
 	log.Print(config)
 	device.InitializeServo()
 	device.InitializePasori()
+	api.InitializeApiServer()
 
 	go listenForIDEvents()
 }
