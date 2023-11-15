@@ -15,3 +15,11 @@ Project Page **[Sakura](https://github.com/niwaniwa/Project-Sakura)**
 - Raspberry Pi
 - [Pasori](https://github.com/bamchoh/pasori)
 - [go-rpio](https://github.com/stianeikeland/go-rpio)
+
+## How to use
+
+`Sakura-Pi-Nnode$`
+```bash
+go mod tidy
+go build -o Sakura-Pi-Node ./cmd
+```
