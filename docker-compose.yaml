@@ -1,0 +1,8 @@
+services:
+  playlist:
+    build: .
+    volumes:
+      - .:/app
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+      - "/dev/gpiomem:/dev/gpiomem"
