@@ -1,4 +1,4 @@
-package device
+package adapter
 
 import (
 	"github.com/bamchoh/pasori"
