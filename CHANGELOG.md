@@ -10,13 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+### Fixed
+
+### Removed
+
+## 0.1.0 - 2023-11-24
+### Changed
 - Changed to MQTT protocol. [`#15`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/15)
 - Changed to Clean architecture. [`#17`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/17)
 
 ### Fixed
 - Fixed access permission. [`#14`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/14)
-
-### Removed
 
 ## 0.0.1 - 2023-11-14
 ### Added
