@@ -35,7 +35,7 @@ func InitializeMQTT(config *config.Config) {
 	options.SetKeepAlive(2 * time.Second)
 	options.SetPingTimeout(2 * time.Second)
 	options.SetDefaultPublishHandler(defaultFunction)
-	client := mqtt.NewClient(options)
+	client = mqtt.NewClient(options)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())

@@ -12,7 +12,6 @@ var (
 	manageMosPin rpio.Pin
 	manageSwPin  rpio.Pin
 	isOpen       bool = true
-	lock         bool = false
 )
 
 const (
