@@ -1,4 +1,4 @@
-package device
+package adapter
 
 import (
 	"fmt"
@@ -12,7 +12,6 @@ var (
 	manageMosPin rpio.Pin
 	manageSwPin  rpio.Pin
 	isOpen       bool = true
-	lock         bool = false
 )
 
 const (
@@ -51,17 +50,16 @@ func OpeningCurrent() {
 	manageMosPin.Low()
 }
 
-func OpenKey() {
+func OpenKey(done chan<- bool) {
 	managePWMPin.High()
 	for i := 1; i <= 60; i++ {
-		managePWMPin.DutyCycle(uint32(i), 100)
 		time.Sleep(10 * time.Millisecond)
 	}
 	managePWMPin.Low()
 	isOpen = true
 }
 
-func CloseKey() {
+func CloseKey(done chan<- bool) {
 	managePWMPin.High()
 	for i := 1; i <= 60; i++ {
 		managePWMPin.DutyCycle(uint32(50-i), 100)
@@ -73,4 +71,8 @@ func CloseKey() {
 
 func GetKeyState() bool {
 	return isOpen
+}
+
+func GetDoorState() bool {
+	return manageSwPin.Read() == 0
 }
