@@ -5,6 +5,7 @@ import (
 	"Sakura-Pi-Node/pkg/infra"
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -13,6 +14,7 @@ func PublishCard(id []byte, path string) {
 	data := entity.Card{
 		ID:        id,
 		Timestamp: timestamp,
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
 	// Jsonにしているが基本的に何でもよい

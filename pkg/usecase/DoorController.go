@@ -6,9 +6,11 @@ import (
 	"Sakura-Pi-Node/pkg/infra"
 	"encoding/json"
 	"fmt"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"os"
 	"time"
 )
+
+const DeviceIDIdentifier = "device_id"
 
 func PublishKeyState(id []byte, path string) {
 	timestamp := time.Now()
@@ -32,6 +34,7 @@ func PublishDoorState(path string) {
 	data := entity.DoorState{
 		IsOpen:    adapter.GetDoorState(),
 		Timestamp: timestamp,
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
 	// Jsonにしているが基本的に何でもよい
@@ -44,15 +47,7 @@ func PublishDoorState(path string) {
 	infra.Publish(path, jsonData, 0)
 }
 
-func KeyControl(state mqtt.Message) {
-	var key entity.KeyState
-
-	err := json.Unmarshal([]byte(state.Payload()), &key)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
+func KeyControl(key entity.KeyState) {
 	adapter.OpeningCurrent()
 	done := make(chan bool)
 	if key.Open {

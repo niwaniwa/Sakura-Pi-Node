@@ -3,8 +3,11 @@ package main
 import (
 	"Sakura-Pi-Node/pkg/adapter"
 	"Sakura-Pi-Node/pkg/config"
+	"Sakura-Pi-Node/pkg/entity"
 	"Sakura-Pi-Node/pkg/infra"
 	"Sakura-Pi-Node/pkg/usecase"
+	"encoding/json"
+	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"os"
@@ -24,14 +27,25 @@ func main() {
 	adapter.InitializePasori()
 	infra.InitializeMQTT(environments)
 
+	subscribeEvents()
+
+	go listenForIDEvents()
+}
+
+func subscribeEvents() {
 	infra.Subscribe(KeyStatePath, func(message mqtt.Message) {
-		usecase.KeyControl(message)
+		var key entity.KeyState
+		err := json.Unmarshal(message.Payload(), &key)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		usecase.KeyControl(key)
 	})
+
 	infra.Subscribe(DoorStateRequestPath, func(message mqtt.Message) {
 		usecase.PublishDoorState(os.Getenv(DoorStateResponcePath))
 	})
-
-	go listenForIDEvents()
 }
 
 func listenForIDEvents() {
