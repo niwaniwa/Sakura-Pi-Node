@@ -15,19 +15,16 @@ import (
 	"syscall"
 )
 
-const (
-	CardPath              = "card_publish_path"
-	KeyStatePath          = "key_state_publish_path"
-	DoorStateRequestPath  = "door_state_request_path"
-	DoorStateResponcePath = "door_state_response_path"
+var (
+	environments *config.Config
 )
 
 func main() {
-	environments := config.LoadEnvironments()
+	environments = config.LoadEnvironments()
 	log.Print(environments)
 	adapter.InitializeServo()
 	adapter.InitializePasori()
-	infra.InitializeMQTT(environments)
+	infra.CreateMQTTClient(environments.TargetIP)
 
 	subscribeEvents()
 
@@ -47,7 +44,7 @@ func main() {
 }
 
 func subscribeEvents() {
-	infra.Subscribe(KeyStatePath, func(message mqtt.Message) {
+	infra.Subscribe(environments.KeyStatePath, func(message mqtt.Message) {
 		var key entity.KeyState
 		err := json.Unmarshal(message.Payload(), &key)
 		if err != nil {
@@ -57,8 +54,8 @@ func subscribeEvents() {
 		usecase.KeyControl(key)
 	})
 
-	infra.Subscribe(DoorStateRequestPath, func(message mqtt.Message) {
-		usecase.PublishDoorState(os.Getenv(DoorStateResponcePath))
+	infra.Subscribe(environments.DoorStateRequestPath, func(message mqtt.Message) {
+		usecase.PublishDoorState(environments.DoorStateResponcePath)
 	})
 }
 
@@ -66,6 +63,6 @@ func listenForIDEvents() {
 	for id := range adapter.IDEventChannel {
 		// IDイベントを受け取った際の処理
 		log.Println("Received ID event:", id)
-		usecase.PublishCard(id, os.Getenv(CardPath))
+		usecase.PublishCard(id, environments.CardPath)
 	}
 }
