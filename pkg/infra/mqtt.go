@@ -1,7 +1,6 @@
 package infra
 
 import (
-	"Sakura-Pi-Node/pkg/config"
 	"log"
 	"os"
 	"time"
@@ -11,18 +10,16 @@ import (
 
 const (
 	debugPrefixIdentifier = "prefix"
-	targetIPIdentifier    = "target_ip"
 )
 
 var (
 	debugPrefix string
-	targetIP    string
 	client      mqtt.Client
 )
 
 type MessageListener func(message mqtt.Message)
 
-func InitializeMQTT(config *config.Config) {
+func CreateMQTTClient(targetIP string) {
 	getEnvironmentValues()
 	mqtt.DEBUG = log.New(os.Stdout, debugPrefix, 0)
 	mqtt.ERROR = log.New(os.Stdout, debugPrefix, 0)
@@ -40,12 +37,10 @@ func InitializeMQTT(config *config.Config) {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-
 }
 
 func getEnvironmentValues() {
 	debugPrefix = os.Getenv(debugPrefixIdentifier)
-	targetIP = os.Getenv(targetIPIdentifier)
 }
 
 func Publish(topic string, message interface{}, qos byte) {

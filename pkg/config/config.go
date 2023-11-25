@@ -6,9 +6,24 @@ import (
 	"strconv"
 )
 
+const (
+	CardPathIdentifier              = "card_publish_path"
+	KeyStatePathIdentifier          = "key_state_publish_path"
+	DoorStateRequestPathIdentifier  = "door_state_request_path"
+	DoorStateResponcePathIdentifier = "door_state_response_path"
+	targetIPIdentifier              = "target_ip"
+	PasoriIntervalTimeIdentifier    = "Pasori_Interval_Time"
+	DebugPrefixIdentifier           = "debug_prefix"
+)
+
 type Config struct {
-	PasoriIntervalTime int
-	GearAngle          int
+	PasoriIntervalTime    int
+	CardPath              string
+	KeyStatePath          string
+	DoorStateRequestPath  string
+	DoorStateResponcePath string
+	TargetIP              string
+	DebugPrefix           string
 }
 
 func LoadEnvironments() *Config {
@@ -18,12 +33,16 @@ func LoadEnvironments() *Config {
 		panic(err)
 	}
 
-	pasoriIntervalTime, _ := strconv.Atoi(os.Getenv("PasoriIntervalTime"))
-	gearAngle, _ := strconv.Atoi(os.Getenv("GearAngle"))
+	pasoriIntervalTime, _ := strconv.Atoi(os.Getenv(PasoriIntervalTimeIdentifier))
 
 	return &Config{
-		PasoriIntervalTime: pasoriIntervalTime,
-		GearAngle:          gearAngle,
+		PasoriIntervalTime:    pasoriIntervalTime,
+		CardPath:              os.Getenv(CardPathIdentifier),
+		KeyStatePath:          os.Getenv(KeyStatePathIdentifier),
+		DoorStateRequestPath:  os.Getenv(DoorStateRequestPathIdentifier),
+		DoorStateResponcePath: os.Getenv(DoorStateResponcePathIdentifier),
+		TargetIP:              os.Getenv(targetIPIdentifier),
+		DebugPrefix:           os.Getenv(DebugPrefixIdentifier),
 	}
 
 }
