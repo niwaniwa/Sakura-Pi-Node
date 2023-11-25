@@ -1,0 +1,50 @@
+name: lint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Code test
+    runs-on: ubuntu-latest
+
+    services:
+      mosquitto:
+        image: eclipse-mosquitto
+        ports:
+          - 1883:1883
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+      
+      - name: Set up dependencies
+        run: |
+          sudo apt update
+          sudo apt install pkg-config libusb-1.0-0-dev
+
+      - name: Get dependencies
+        run: go get -v -t -d ./...
+
+      - name: Test
+        run: go test ./...
+
+  golangci:
+    name: golangci lint check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
+          args: ./...
