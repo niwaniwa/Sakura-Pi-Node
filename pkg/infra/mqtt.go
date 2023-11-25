@@ -60,3 +60,7 @@ func Subscribe(topic string, listener MessageListener) {
 		log.Fatal(subscribeToken.Error())
 	}
 }
+
+func CloseAll() {
+	client.Disconnect(1000)
+}

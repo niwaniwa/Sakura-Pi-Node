@@ -11,6 +11,8 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 const (
@@ -30,6 +32,18 @@ func main() {
 	subscribeEvents()
 
 	go listenForIDEvents()
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT)
+	go func() {
+		<-signals
+		fmt.Println("Ctrl+C pressed. Shutting down...")
+		infra.CloseAll()
+		os.Exit(0)
+	}()
+
+	select {}
+
 }
 
 func subscribeEvents() {
