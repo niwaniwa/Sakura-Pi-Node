@@ -6,13 +6,15 @@ import (
 	"time"
 )
 
+var targetIP = "mosquitto:1883"
+
 func TestConnect(t *testing.T) {
-	CreateMQTTClient("localhost:1883")
+	CreateMQTTClient(targetIP)
 	CloseAll()
 }
 
 func TestMQTTPublishAndSubscribe(t *testing.T) {
-	CreateMQTTClient("localhost:1883")
+	CreateMQTTClient(targetIP)
 
 	defer CloseAll()
 
