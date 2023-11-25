@@ -10,6 +10,9 @@ jobs:
     name: Code test
     runs-on: ubuntu-latest
 
+    env:
+      MQTT_BROKER_ADDRESS: mosquitto:1883
+
     services:
       mosquitto:
         image: eclipse-mosquitto

@@ -2,11 +2,12 @@ package infra
 
 import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"os"
 	"testing"
 	"time"
 )
 
-var targetIP = "mosquitto:1883"
+var targetIP = os.Getenv("MQTT_BROKER_ADDRESS")
 
 func TestConnect(t *testing.T) {
 	CreateMQTTClient(targetIP)
