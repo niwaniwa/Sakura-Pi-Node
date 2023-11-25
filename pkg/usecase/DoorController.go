@@ -34,7 +34,7 @@ func PublishDoorState(path string) {
 	data := entity.DoorState{
 		IsOpen:    adapter.GetDoorState(),
 		Timestamp: timestamp,
-		DeviceID:  os.Getenv(DeviceIdIdentifier),
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
 	// Jsonにしているが基本的に何でもよい
