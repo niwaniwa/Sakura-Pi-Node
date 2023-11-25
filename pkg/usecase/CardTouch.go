@@ -14,7 +14,7 @@ func PublishCard(id []byte, path string) {
 	data := entity.Card{
 		ID:        id,
 		Timestamp: timestamp,
-		DeviceID:  os.Getenv(DeviceIdIdentifier),
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
 	// Jsonにしているが基本的に何でもよい
