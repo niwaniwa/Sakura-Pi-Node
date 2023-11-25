@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const DeviceIdIdentifier = "device_id"
+const DeviceIDIdentifier = "device_id"
 
 func PublishKeyState(id []byte, path string) {
 	timestamp := time.Now()
