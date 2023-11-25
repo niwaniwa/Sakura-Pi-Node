@@ -13,8 +13,8 @@ import (
 const (
 	CardPath              = "card_publish_path"
 	KeyStatePath          = "key_state_publish_path"
-	DoorStateRequestPath  = "door_state_publish_path"
-	DoorStateResponcePath = "door_state_publish_path"
+	DoorStateRequestPath  = "door_state_request_path"
+	DoorStateResponcePath = "door_state_response_path"
 )
 
 func main() {
