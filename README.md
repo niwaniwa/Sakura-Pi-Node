@@ -18,8 +18,15 @@ Project Page **[Sakura](https://github.com/niwaniwa/Project-Sakura)**
 
 ## How to use
 
-`Sakura-Pi-Nnode$`
+### build from source
+
 ```bash
 go mod tidy
 go build -o Sakura-Pi-Node ./cmd
+```
+
+### build by docker compose
+
+```bash
+docker compose up -d
 ```
