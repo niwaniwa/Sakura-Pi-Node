@@ -24,11 +24,14 @@ func main() {
 	log.Print(environments)
 	adapter.InitializeServo()
 	adapter.InitializePasori()
+	adapter.InitializeLed()
 	infra.CreateMQTTClient(environments.TargetIP)
 
 	subscribeEvents()
 
 	go listenForIDEvents()
+
+	start()
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT)
@@ -65,4 +68,8 @@ func listenForIDEvents() {
 		log.Println("Received ID event:", id)
 		usecase.PublishCard(id, environments.CardPath)
 	}
+}
+
+func start() {
+	usecase.KeyControl(entity.KeyState{Open: false})
 }

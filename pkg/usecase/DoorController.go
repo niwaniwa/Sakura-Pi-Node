@@ -48,7 +48,6 @@ func PublishDoorState(path string) {
 }
 
 func KeyControl(key entity.KeyState) {
-	adapter.OpeningCurrent()
 	done := make(chan bool)
 	if key.Open {
 		go adapter.OpenKey(done)
@@ -56,6 +55,4 @@ func KeyControl(key entity.KeyState) {
 		go adapter.CloseKey(done)
 	}
 	<-done
-	adapter.BlockCurrent()
-
 }
