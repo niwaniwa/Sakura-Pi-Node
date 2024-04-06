@@ -8,17 +8,17 @@ import (
 )
 
 var (
-	managePWMPin 	rpio.Pin
-	manageMosPin 	rpio.Pin
-	manageSwPin  	rpio.Pin
-	isOpen       	bool = true
+	managePWMPin    rpio.Pin
+	manageDoorSwPin rpio.Pin
+	manageSwPin     rpio.Pin
+	isOpen          bool = true
 	motorRunning    bool = false
-	motorStartTime  time.Time
 )
 
 const (
-	PwmPin = 13
-	SwPin  = 18
+	PwmPin           = 13
+	SwPin            = 18
+	DoorSwPin        = 21
 	StopPosition     = 1520 // サーボモーターを停止させるPWMパルス幅(マイクロ秒)
 	ForwardPosition  = 800  // サーボモーターを正転させるPWMパルス幅(マイクロ秒)
 	ReversePosition  = 2200 // サーボモーターを反転させるPWMパルス幅(マイクロ秒)
@@ -43,68 +43,78 @@ func InitializeServo() {
 	manageSwPin = rpio.Pin(SwPin)
 	manageSwPin.Input()
 	manageSwPin.PullUp()
+
+	manageDoorSwPin = rpio.Pin(DoorSwPin)
+	manageDoorSwPin.Input()
+	manageDoorSwPin.PullUp()
 }
 
 func OpenKey(done chan<- bool) {
 	managePWMPin.High()
 
-	motorStartTime = time.Now()
+	motorStartTime := time.Now()
 	motorRunning = true
-	SetServo(managePWMPin, float64(ForwardPosition))
+	setServo(managePWMPin, float64(ForwardPosition))
 
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
 				position := StopPosition
 				motorRunning = false
-				SetServo(managePWMPin, float64(position))
+				setServo(managePWMPin, float64(position))
 				break
 			}
 		}
-	
+
 		// timeout
 		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
 			position := StopPosition
 			motorRunning = false
-			SetServo(managePWMPin, float64(position))
+			setServo(managePWMPin, float64(position))
 			break
 		}
 
 		time.Sleep(10 * time.Millisecond)
 	}
-	
+
 	managePWMPin.Low()
+	RedLedToggle()
+	GreenLedToggle()
 	isOpen = true
+	done <- true
 }
 
 func CloseKey(done chan<- bool) {
 	managePWMPin.High()
-	motorStartTime = time.Now()
+	motorStartTime := time.Now()
 	motorRunning = true
-	SetServo(managePWMPin, float64(ReversePosition))
+	setServo(managePWMPin, float64(ReversePosition))
 
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
 				position := StopPosition
 				motorRunning = false
-				SetServo(managePWMPin, float64(position))
+				setServo(managePWMPin, float64(position))
 				break
 			}
 		}
-	
+
 		// timeout
 		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
 			position := StopPosition
 			motorRunning = false
-			SetServo(managePWMPin, float64(position))
+			setServo(managePWMPin, float64(position))
 			break
 		}
 
 		time.Sleep(10 * time.Millisecond)
 	}
 	managePWMPin.Low()
+	RedLedToggle()
+	GreenLedToggle()
 	isOpen = false
+	done <- true
 }
 
 func GetKeyState() bool {
@@ -112,11 +122,11 @@ func GetKeyState() bool {
 }
 
 func GetDoorState() bool {
-	return manageSwPin.Read() == 0
+	return manageDoorSwPin.Read() == 0
 }
 
 // 指定したパルス幅でサーボモーターを制御
-func SetServo(pin rpio.Pin, pulseWidthMicroSeconds float64) {
+func setServo(pin rpio.Pin, pulseWidthMicroSeconds float64) {
 	pulseWidthFraction := pulseWidthMicroSeconds / 20000
 	dutyCycle := uint32(pulseWidthFraction * 1000)
 
