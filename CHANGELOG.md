@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 0.2.0 - 2024-04-06
+### Changed
+- Changed and support new hardware. [`#35`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/35)
+
 ## 0.1.0 - 2023-11-24
 ### Changed
 - Changed to MQTT protocol. [`#15`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/15)
