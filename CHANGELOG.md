@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added reed switch api [`#38`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/38)
 
 ### Changed
-- Separate KeyState from DoorState
+- Separate KeyState from DoorState[`#36`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/36)
 
 ### Fixed
 
