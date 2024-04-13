@@ -7,23 +7,25 @@ import (
 )
 
 const (
-	CardPathIdentifier              = "card_publish_path"
-	KeyStatePathIdentifier          = "key_state_publish_path"
-	DoorStateRequestPathIdentifier  = "door_state_request_path"
-	DoorStateResponcePathIdentifier = "door_state_response_path"
-	targetIPIdentifier              = "target_ip"
-	PasoriIntervalTimeIdentifier    = "Pasori_Interval_Time"
-	DebugPrefixIdentifier           = "debug_prefix"
+	CardPathIdentifier                   = "card_publish_path"
+	KeyStatePathIdentifier               = "key_state_publish_path"
+	DoorStateRequestPathIdentifier       = "door_state_request_path"
+	DoorSwitchStateRequestPathIdentifier = "door_switch_state_request_path"
+	DoorStateResponcePathIdentifier      = "door_state_response_path"
+	targetIPIdentifier                   = "target_ip"
+	PasoriIntervalTimeIdentifier         = "Pasori_Interval_Time"
+	DebugPrefixIdentifier                = "debug_prefix"
 )
 
 type Config struct {
-	PasoriIntervalTime    int
-	CardPath              string
-	KeyStatePath          string
-	DoorStateRequestPath  string
-	DoorStateResponcePath string
-	TargetIP              string
-	DebugPrefix           string
+	PasoriIntervalTime         int
+	CardPath                   string
+	KeyStatePath               string
+	DoorStateRequestPath       string
+	DoorSwitchStateRequestPath string
+	DoorStateResponcePath      string
+	TargetIP                   string
+	DebugPrefix                string
 }
 
 func LoadEnvironments() *Config {
@@ -36,13 +38,14 @@ func LoadEnvironments() *Config {
 	pasoriIntervalTime, _ := strconv.Atoi(os.Getenv(PasoriIntervalTimeIdentifier))
 
 	return &Config{
-		PasoriIntervalTime:    pasoriIntervalTime,
-		CardPath:              os.Getenv(CardPathIdentifier),
-		KeyStatePath:          os.Getenv(KeyStatePathIdentifier),
-		DoorStateRequestPath:  os.Getenv(DoorStateRequestPathIdentifier),
-		DoorStateResponcePath: os.Getenv(DoorStateResponcePathIdentifier),
-		TargetIP:              os.Getenv(targetIPIdentifier),
-		DebugPrefix:           os.Getenv(DebugPrefixIdentifier),
+		PasoriIntervalTime:         pasoriIntervalTime,
+		CardPath:                   os.Getenv(CardPathIdentifier),
+		KeyStatePath:               os.Getenv(KeyStatePathIdentifier),
+		DoorStateRequestPath:       os.Getenv(DoorStateRequestPathIdentifier),
+		DoorSwitchStateRequestPath: os.Getenv(DoorSwitchStateRequestPathIdentifier),
+		DoorStateResponcePath:      os.Getenv(DoorStateResponcePathIdentifier),
+		TargetIP:                   os.Getenv(targetIPIdentifier),
+		DebugPrefix:                os.Getenv(DebugPrefixIdentifier),
 	}
 
 }

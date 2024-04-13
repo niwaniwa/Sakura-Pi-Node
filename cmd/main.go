@@ -60,6 +60,11 @@ func subscribeEvents() {
 	infra.Subscribe(environments.DoorStateRequestPath, func(message mqtt.Message) {
 		usecase.PublishDoorState(environments.DoorStateResponcePath)
 	})
+
+	infra.Subscribe(environments.DoorSwitchStateRequestPath, func(message mqtt.Message) {
+		usecase.PublishDoorSwitchState(environments.DoorSwitchStateRequestPath)
+	})
+
 }
 
 func listenForIDEvents() {

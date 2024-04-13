@@ -11,6 +11,7 @@ var (
 	managePWMPin    rpio.Pin
 	manageDoorSwPin rpio.Pin
 	manageSwPin     rpio.Pin
+	manageReedPin   rpio.Pin
 	isOpen          bool = true
 	motorRunning    bool = false
 )
@@ -19,6 +20,7 @@ const (
 	PwmPin           = 13
 	SwPin            = 18
 	DoorSwPin        = 21
+	DoorReedSwitch   = 26
 	StopPosition     = 1520 // サーボモーターを停止させるPWMパルス幅(マイクロ秒)
 	ForwardPosition  = 800  // サーボモーターを正転させるPWMパルス幅(マイクロ秒)
 	ReversePosition  = 2200 // サーボモーターを反転させるPWMパルス幅(マイクロ秒)
@@ -47,6 +49,10 @@ func InitializeServo() {
 	manageDoorSwPin = rpio.Pin(DoorSwPin)
 	manageDoorSwPin.Input()
 	manageDoorSwPin.PullUp()
+
+	manageReedPin = rpio.Pin(DoorReedSwitch)
+	manageReedPin.Input()
+	manageReedPin.PullUp()
 }
 
 func OpenKey(done chan<- bool) {
@@ -121,7 +127,12 @@ func GetKeyState() bool {
 	return isOpen
 }
 
+// true = close, false = open
 func GetDoorState() bool {
+	return manageReedPin.Read() == 0
+}
+
+func GetDoorSwitchState() bool {
 	return manageDoorSwPin.Read() == 0
 }
 
