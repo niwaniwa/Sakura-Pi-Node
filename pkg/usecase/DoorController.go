@@ -12,11 +12,12 @@ import (
 
 const DeviceIDIdentifier = "device_id"
 
-func PublishKeyState(id []byte, path string) {
+func PublishDoorState(path string) {
 	timestamp := time.Now()
-	data := entity.KeyState{
-		Open:      adapter.GetKeyState(),
+	data := entity.DoorState{
+		IsOpen:    adapter.GetDoorState(),
 		Timestamp: timestamp,
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
 	// Jsonにしているが基本的に何でもよい
@@ -29,10 +30,10 @@ func PublishKeyState(id []byte, path string) {
 	infra.Publish(path, jsonData, 0)
 }
 
-func PublishDoorState(path string) {
+func PublishDoorSwitchState(path string) {
 	timestamp := time.Now()
-	data := entity.DoorState{
-		IsOpen:    adapter.GetDoorState(),
+	data := entity.DoorSwitchState{
+		IsOpen:    adapter.GetDoorSwitchState(),
 		Timestamp: timestamp,
 		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
