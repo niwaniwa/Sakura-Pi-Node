@@ -1,5 +1,6 @@
+version: "3.9"
 services:
-  playlist:
+  app:
     build: .
     volumes:
       - .:/app
@@ -7,3 +8,10 @@ services:
       - "/dev/bus/usb:/dev/bus/usb"
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/mem:/dev/mem"
+    networks:
+      - sakura-network
+
+networks:
+  sakura-network:
+    name: sakura-network
+    external: true
