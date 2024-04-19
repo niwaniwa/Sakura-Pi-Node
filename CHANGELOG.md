@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added reed switch api [`#38`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/38)
 - Added door_switch_state_request setting(env) [`#40`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/40)
 - Added dev container setting. [`#43`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/45)
+- Added network setting. [`#46`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/47)
 
 ### Changed
 - Separate KeyState from DoorState[`#36`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/36)
