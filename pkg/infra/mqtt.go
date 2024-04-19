@@ -21,7 +21,6 @@ type MessageListener func(message mqtt.Message)
 
 func CreateMQTTClient(targetIP string) {
 	getEnvironmentValues()
-	mqtt.DEBUG = log.New(os.Stdout, debugPrefix, 0)
 	mqtt.ERROR = log.New(os.Stdout, debugPrefix, 0)
 
 	var defaultFunction mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
