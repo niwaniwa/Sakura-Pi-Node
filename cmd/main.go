@@ -76,5 +76,6 @@ func listenForIDEvents() {
 }
 
 func start() {
+	adapter.StartReading()
 	usecase.KeyControl(entity.KeyState{Open: false})
 }
