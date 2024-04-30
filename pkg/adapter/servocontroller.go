@@ -73,7 +73,7 @@ func OpenKey(done chan<- bool) {
 		}
 
 		// timeout
-		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
+		if time.Since(motorStartTime) > timeout*time.Millisecond {
 			position := StopPosition
 			motorRunning = false
 			setServo(managePWMPin, float64(position))
@@ -94,8 +94,7 @@ func CloseKey(done chan<- bool) {
 	if motorRunning {
 		return
 	}
-
-	managePWMPin.High()
+	
 	motorStartTime := time.Now()
 	motorRunning = true
 	setServo(managePWMPin, float64(ReversePosition))
