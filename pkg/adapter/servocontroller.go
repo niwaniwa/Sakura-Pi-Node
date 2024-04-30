@@ -53,6 +53,11 @@ func InitializeServo(config config.Config) {
 }
 
 func OpenKey(done chan<- bool) {
+
+	if motorRunning {
+		return
+	}
+
 	managePWMPin.High()
 
 	motorStartTime := time.Now()
@@ -88,6 +93,11 @@ func OpenKey(done chan<- bool) {
 }
 
 func CloseKey(done chan<- bool) {
+
+	if motorRunning {
+		return
+	}
+
 	managePWMPin.High()
 	motorStartTime := time.Now()
 	motorRunning = true
@@ -104,7 +114,7 @@ func CloseKey(done chan<- bool) {
 		}
 
 		// timeout
-		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
+		if time.Since(motorStartTime) > timeout*time.Millisecond {
 			position := StopPosition
 			motorRunning = false
 			setServo(managePWMPin, float64(position))
@@ -124,7 +134,7 @@ func GetKeyState() bool {
 	return isOpen
 }
 
-// true = close, false = open
+// GetDoorState true = close, false = open
 func GetDoorState() bool {
 	return manageReedPin.Read() == 0
 }
