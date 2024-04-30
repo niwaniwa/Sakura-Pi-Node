@@ -63,7 +63,7 @@ func OpenKey(done chan<- bool) {
 }
 
 func CloseKey(done chan<- bool) {
-	result := servoLoop(float64(StopPosition))
+	result := servoLoop(float64(ReversePosition))
 	RedLedToggle()
 	GreenLedToggle()
 	if result {
@@ -96,7 +96,7 @@ func servoLoop(servoPosition float64) bool {
 			return false
 		}
 
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
