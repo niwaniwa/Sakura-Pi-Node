@@ -53,65 +53,38 @@ func InitializeServo(config config.Config) {
 }
 
 func OpenKey(done chan<- bool) {
-
-	if motorRunning {
-		return
-	}
-
-	motorStartTime := time.Now()
-	motorRunning = true
-	setServo(managePWMPin, float64(ForwardPosition))
-
-	isSuccess := false
-
-	for {
-		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
-			if manageSwPin.Read() == rpio.Low {
-				position := StopPosition
-				motorRunning = false
-				setServo(managePWMPin, float64(position))
-				isSuccess = true
-				break
-			}
-		}
-
-		// timeout
-		if time.Since(motorStartTime) > timeout*time.Millisecond {
-			position := StopPosition
-			motorRunning = false
-			setServo(managePWMPin, float64(position))
-			break
-		}
-
-		time.Sleep(10 * time.Millisecond)
-	}
-
+	result := servoLoop(float64(ForwardPosition))
 	RedLedToggle()
 	GreenLedToggle()
-	isOpen = true
-	done <- isSuccess
+	if result {
+		isOpen = true
+	}
+	done <- result
 }
 
 func CloseKey(done chan<- bool) {
-
-	if motorRunning {
-		return
+	result := servoLoop(float64(StopPosition))
+	RedLedToggle()
+	GreenLedToggle()
+	if result {
+		isOpen = false
 	}
+	done <- result
+}
 
-	motorStartTime := time.Now()
+func servoLoop(servoPosition float64) bool {
+	if motorRunning {
+		return false
+	}
+	setServo(managePWMPin, servoPosition)
 	motorRunning = true
-	setServo(managePWMPin, float64(ReversePosition))
-
-	isSuccess := false
-
+	motorStartTime := time.Now()
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
-				position := StopPosition
 				motorRunning = false
-				setServo(managePWMPin, float64(position))
-				isSuccess = true
-				break
+				setServo(managePWMPin, float64(StopPosition))
+				return true
 			}
 		}
 
@@ -120,16 +93,11 @@ func CloseKey(done chan<- bool) {
 			position := StopPosition
 			motorRunning = false
 			setServo(managePWMPin, float64(position))
-			break
+			return false
 		}
 
 		time.Sleep(10 * time.Millisecond)
 	}
-
-	RedLedToggle()
-	GreenLedToggle()
-	isOpen = false
-	done <- isSuccess
 }
 
 func GetKeyState() bool {
