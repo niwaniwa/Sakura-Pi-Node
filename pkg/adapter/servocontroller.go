@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"Sakura-Pi-Node/pkg/config"
 	"fmt"
 	"github.com/stianeikeland/go-rpio/v4"
 	"os"
@@ -17,10 +18,6 @@ var (
 )
 
 const (
-	PwmPin           = 13
-	SwPin            = 18
-	DoorSwPin        = 21
-	DoorReedSwitch   = 26
 	StopPosition     = 1520 // サーボモーターを停止させるPWMパルス幅(マイクロ秒)
 	ForwardPosition  = 800  // サーボモーターを正転させるPWMパルス幅(マイクロ秒)
 	ReversePosition  = 2200 // サーボモーターを反転させるPWMパルス幅(マイクロ秒)
@@ -28,7 +25,7 @@ const (
 	timeout          = 2500 // 応答がなかった場合にタイムアウトして処理を終了する時間 (ミリ秒)
 )
 
-func InitializeServo() {
+func InitializeServo(config config.Config) {
 	err := rpio.Open()
 
 	if err != nil {
@@ -36,21 +33,21 @@ func InitializeServo() {
 		os.Exit(1)
 	}
 
-	managePWMPin = rpio.Pin(PwmPin) // PWM setup
+	managePWMPin = rpio.Pin(config.PwmPin) // PWM setup
 	managePWMPin.Mode(rpio.Pwm)
 	managePWMPin.Freq(50 * 100)
 	managePWMPin.DutyCycle(0, 100)
 	managePWMPin.Low()
 
-	manageSwPin = rpio.Pin(SwPin)
+	manageSwPin = rpio.Pin(config.SwPin)
 	manageSwPin.Input()
 	manageSwPin.PullUp()
 
-	manageDoorSwPin = rpio.Pin(DoorSwPin)
+	manageDoorSwPin = rpio.Pin(config.DoorSwPin)
 	manageDoorSwPin.Input()
 	manageDoorSwPin.PullUp()
 
-	manageReedPin = rpio.Pin(DoorReedSwitch)
+	manageReedPin = rpio.Pin(config.DoorReedSwitch)
 	manageReedPin.Input()
 	manageReedPin.PullUp()
 }

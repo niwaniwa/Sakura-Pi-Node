@@ -22,9 +22,9 @@ var (
 func main() {
 	environments = config.LoadEnvironments()
 	log.Print(environments)
-	adapter.InitializeServo()
+	adapter.InitializeServo(*environments)
 	adapter.InitializePasori()
-	adapter.InitializeLed()
+	adapter.InitializeLed(*environments)
 	infra.CreateMQTTClient(environments.TargetIP)
 
 	subscribeEvents()
@@ -58,7 +58,7 @@ func subscribeEvents() {
 	})
 
 	infra.Subscribe(environments.DoorStateRequestPath, func(message mqtt.Message) {
-		usecase.PublishDoorState(environments.DoorStateResponcePath)
+		usecase.PublishDoorState(environments.DoorStateResponsePath)
 	})
 
 	infra.Subscribe(environments.DoorSwitchStateRequestPath, func(message mqtt.Message) {
