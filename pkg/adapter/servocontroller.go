@@ -37,7 +37,7 @@ func InitializeServo(config config.Config) {
 	managePWMPin.Mode(rpio.Pwm)
 	managePWMPin.Freq(50 * 100)
 	managePWMPin.DutyCycle(0, 100)
-	managePWMPin.Low()
+	managePWMPin.High()
 
 	manageSwPin = rpio.Pin(config.SwPin)
 	manageSwPin.Input()
@@ -57,8 +57,6 @@ func OpenKey(done chan<- bool) {
 	if motorRunning {
 		return
 	}
-
-	managePWMPin.High()
 
 	motorStartTime := time.Now()
 	motorRunning = true
@@ -85,7 +83,6 @@ func OpenKey(done chan<- bool) {
 		time.Sleep(10 * time.Millisecond)
 	}
 
-	managePWMPin.Low()
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = true
@@ -123,7 +120,7 @@ func CloseKey(done chan<- bool) {
 
 		time.Sleep(10 * time.Millisecond)
 	}
-	managePWMPin.Low()
+
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = false
