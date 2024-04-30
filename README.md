@@ -15,18 +15,34 @@ Project Page **[Sakura](https://github.com/niwaniwa/Project-Sakura)**
 - Raspberry Pi
 - [Pasori](https://github.com/bamchoh/pasori)
 - [go-rpio](https://github.com/stianeikeland/go-rpio)
+- libusb
 
 ## How to use
 
 ### build from source
 
+1. Installation of Dependencies
+```bash
+apt install -y gcc-arm-linux-gnueabihf libusb-1.0-0-dev libusb-1.0-0-dev:armhf
+```
+
+2. Build from source
 ```bash
 go mod tidy
 go build -o Sakura-Pi-Node ./cmd
 ```
 
-### build by docker compose
+3. Run
+Administrative privileges are required. (for Pasori)
+```bash
+sudo ./main
+```
 
+### build by docker compose
+Automatically run in privileged mode.
 ```bash
 docker compose up -d
 ```
+
+## License
+MIT License
