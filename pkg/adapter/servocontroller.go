@@ -4,7 +4,6 @@ import (
 	"Sakura-Pi-Node/pkg/config"
 	"fmt"
 	"github.com/stianeikeland/go-rpio/v4"
-	"log"
 	"os"
 	"time"
 )
@@ -63,12 +62,15 @@ func OpenKey(done chan<- bool) {
 	motorRunning = true
 	setServo(managePWMPin, float64(ForwardPosition))
 
+	isSuccess := false
+
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
 				position := StopPosition
 				motorRunning = false
 				setServo(managePWMPin, float64(position))
+				isSuccess = true
 				break
 			}
 		}
@@ -87,10 +89,7 @@ func OpenKey(done chan<- bool) {
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = true
-
-	log.Println("Done")
-
-	done <- true
+	done <- isSuccess
 }
 
 func CloseKey(done chan<- bool) {
@@ -103,12 +102,15 @@ func CloseKey(done chan<- bool) {
 	motorRunning = true
 	setServo(managePWMPin, float64(ReversePosition))
 
+	isSuccess := false
+
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
 				position := StopPosition
 				motorRunning = false
 				setServo(managePWMPin, float64(position))
+				isSuccess = true
 				break
 			}
 		}
@@ -127,10 +129,7 @@ func CloseKey(done chan<- bool) {
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = false
-
-	log.Println("Done")
-
-	done <- true
+	done <- isSuccess
 }
 
 func GetKeyState() bool {
