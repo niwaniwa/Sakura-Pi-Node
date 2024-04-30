@@ -1,14 +1,10 @@
 package adapter
 
 import (
+	"Sakura-Pi-Node/pkg/config"
 	"fmt"
 	"github.com/stianeikeland/go-rpio/v4"
 	"os"
-)
-
-const (
-	RedLed   = 13
-	GreenLed = 18
 )
 
 var (
@@ -16,7 +12,7 @@ var (
 	greenLedPin rpio.Pin
 )
 
-func InitializeLed() {
+func InitializeLed(config config.Config) {
 	err := rpio.Open()
 
 	if err != nil {
@@ -24,11 +20,11 @@ func InitializeLed() {
 		os.Exit(1)
 	}
 
-	redLedPin = rpio.Pin(RedLed)
+	redLedPin = rpio.Pin(config.RedLed)
 	redLedPin.Output()
 	redLedPin.High()
 
-	greenLedPin = rpio.Pin(GreenLed)
+	greenLedPin = rpio.Pin(config.GreenLed)
 	greenLedPin.Output()
 	greenLedPin.High()
 }
