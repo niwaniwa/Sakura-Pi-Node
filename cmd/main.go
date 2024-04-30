@@ -37,7 +37,7 @@ func main() {
 	signal.Notify(signals, syscall.SIGINT)
 	go func() {
 		<-signals
-		fmt.Println("Ctrl+C pressed. Shutting down...")
+		log.Println("\nCtrl+C pressed. Shutting down...")
 		infra.CloseAll()
 		os.Exit(0)
 	}()
@@ -54,6 +54,7 @@ func subscribeEvents() {
 			fmt.Println(err)
 			return
 		}
+		log.Println("Received key event. Key State:", key.Open)
 		usecase.KeyControl(key)
 	})
 
@@ -77,5 +78,4 @@ func listenForIDEvents() {
 
 func start() {
 	adapter.StartReading()
-	usecase.KeyControl(entity.KeyState{Open: false})
 }

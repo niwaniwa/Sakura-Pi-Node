@@ -37,7 +37,7 @@ func InitializeServo(config config.Config) {
 	managePWMPin.Mode(rpio.Pwm)
 	managePWMPin.Freq(50 * 100)
 	managePWMPin.DutyCycle(0, 100)
-	managePWMPin.Low()
+	managePWMPin.High()
 
 	manageSwPin = rpio.Pin(config.SwPin)
 	manageSwPin.Input()
@@ -53,78 +53,58 @@ func InitializeServo(config config.Config) {
 }
 
 func OpenKey(done chan<- bool) {
-	managePWMPin.High()
-
-	motorStartTime := time.Now()
-	motorRunning = true
-	setServo(managePWMPin, float64(ForwardPosition))
-
-	for {
-		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
-			if manageSwPin.Read() == rpio.Low {
-				position := StopPosition
-				motorRunning = false
-				setServo(managePWMPin, float64(position))
-				break
-			}
-		}
-
-		// timeout
-		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
-			position := StopPosition
-			motorRunning = false
-			setServo(managePWMPin, float64(position))
-			break
-		}
-
-		time.Sleep(10 * time.Millisecond)
-	}
-
-	managePWMPin.Low()
+	result := servoLoop(float64(ForwardPosition))
 	RedLedToggle()
 	GreenLedToggle()
-	isOpen = true
-	done <- true
+	if result {
+		isOpen = true
+	}
+	done <- result
 }
 
 func CloseKey(done chan<- bool) {
-	managePWMPin.High()
-	motorStartTime := time.Now()
-	motorRunning = true
-	setServo(managePWMPin, float64(ReversePosition))
+	result := servoLoop(float64(ReversePosition))
+	RedLedToggle()
+	GreenLedToggle()
+	if result {
+		isOpen = false
+	}
+	done <- result
+}
 
+func servoLoop(servoPosition float64) bool {
+	if motorRunning {
+		return false
+	}
+	setServo(managePWMPin, servoPosition)
+	motorRunning = true
+	motorStartTime := time.Now()
 	for {
 		if motorRunning && time.Since(motorStartTime) > IgnoreSwitchTime*time.Millisecond {
 			if manageSwPin.Read() == rpio.Low {
-				position := StopPosition
 				motorRunning = false
-				setServo(managePWMPin, float64(position))
-				break
+				setServo(managePWMPin, float64(StopPosition))
+				return true
 			}
 		}
 
 		// timeout
-		if motorRunning && time.Since(motorStartTime) > timeout*time.Millisecond {
+		if time.Since(motorStartTime) > timeout*time.Millisecond {
 			position := StopPosition
 			motorRunning = false
 			setServo(managePWMPin, float64(position))
-			break
+			return false
 		}
 
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
-	managePWMPin.Low()
-	RedLedToggle()
-	GreenLedToggle()
-	isOpen = false
-	done <- true
 }
 
 func GetKeyState() bool {
 	return isOpen
 }
 
-// true = close, false = open
+// GetDoorState true = close, false = open
 func GetDoorState() bool {
 	return manageReedPin.Read() == 0
 }
