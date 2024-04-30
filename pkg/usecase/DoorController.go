@@ -6,6 +6,7 @@ import (
 	"Sakura-Pi-Node/pkg/infra"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"time"
 )
@@ -56,4 +57,5 @@ func KeyControl(key entity.KeyState) {
 		go adapter.CloseKey(done)
 	}
 	<-done
+	log.Println("Key process ", done)
 }
