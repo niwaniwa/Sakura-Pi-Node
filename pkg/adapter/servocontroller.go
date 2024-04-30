@@ -4,6 +4,7 @@ import (
 	"Sakura-Pi-Node/pkg/config"
 	"fmt"
 	"github.com/stianeikeland/go-rpio/v4"
+	"log"
 	"os"
 	"time"
 )
@@ -86,6 +87,9 @@ func OpenKey(done chan<- bool) {
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = true
+
+	log.Println("Done")
+
 	done <- true
 }
 
@@ -94,7 +98,7 @@ func CloseKey(done chan<- bool) {
 	if motorRunning {
 		return
 	}
-	
+
 	motorStartTime := time.Now()
 	motorRunning = true
 	setServo(managePWMPin, float64(ReversePosition))
@@ -123,6 +127,9 @@ func CloseKey(done chan<- bool) {
 	RedLedToggle()
 	GreenLedToggle()
 	isOpen = false
+
+	log.Println("Done")
+
 	done <- true
 }
 

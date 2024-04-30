@@ -37,7 +37,7 @@ func main() {
 	signal.Notify(signals, syscall.SIGINT)
 	go func() {
 		<-signals
-		log.Println("Ctrl+C pressed. Shutting down...")
+		log.Println("\nCtrl+C pressed. Shutting down...")
 		infra.CloseAll()
 		os.Exit(0)
 	}()
