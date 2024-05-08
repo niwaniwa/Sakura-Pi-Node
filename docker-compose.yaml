@@ -11,6 +11,7 @@ services:
       - "/dev/mem:/dev/mem"
     networks:
       - sakura-network
+    restart: always
 
 networks:
   sakura-network:

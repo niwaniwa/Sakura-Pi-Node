@@ -12,12 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added door_switch_state_request setting(env) [`#40`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/40)
 - Added dev container setting. [`#43`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/45)
 - Added network setting. [`#46`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/47)
+- Added network setting. [`#54`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/54)
 
 ### Changed
 - Separate KeyState from DoorState[`#36`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/36)
 - MQTT logging mode[`#42`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/44))
+- Change hard-coded values to config file.[`#33`](https://github.com/niwaniwa/Sakura-Pi-Node/pull/51)
+- Organize debug logs and optimize servo control.[`#52`](https://github.com/niwaniwa/Sakura-Pi-Node/pull/52)
 
 ### Fixed
+- Fixed usb inaccessibility issue when using docker.[`#48`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/48)
 
 ### Removed
 
