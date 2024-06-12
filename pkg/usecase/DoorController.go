@@ -56,6 +56,6 @@ func KeyControl(key entity.KeyState) {
 	} else {
 		go adapter.CloseKey(done)
 	}
-	<-done
-	log.Println("Key process ", done)
+	result := <-done
+	log.Println("Key process ", result)
 }
