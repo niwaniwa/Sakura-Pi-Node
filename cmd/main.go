@@ -8,11 +8,12 @@ import (
 	"Sakura-Pi-Node/pkg/usecase"
 	"encoding/json"
 	"fmt"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 var (
@@ -47,6 +48,15 @@ func main() {
 }
 
 func subscribeEvents() {
+
+	infra.Subscribe(environments.DoorStateRequestPath, func(message mqtt.Message) {
+		usecase.PublishDoorState(environments.DoorStateResponsePath)
+	})
+
+	infra.Subscribe(environments.DoorSwitchStateRequestPath, func(message mqtt.Message) {
+		usecase.PublishDoorSwitchState(environments.DoorSwitchStateResponsePath)
+	})
+
 	infra.Subscribe(environments.KeyStatePath, func(message mqtt.Message) {
 		var key entity.KeyState
 		err := json.Unmarshal(message.Payload(), &key)
@@ -56,14 +66,6 @@ func subscribeEvents() {
 		}
 		log.Println("Received key event. Key State:", key.Open)
 		usecase.KeyControl(key)
-	})
-
-	infra.Subscribe(environments.DoorStateRequestPath, func(message mqtt.Message) {
-		usecase.PublishDoorState(environments.DoorStateResponsePath)
-	})
-
-	infra.Subscribe(environments.DoorSwitchStateRequestPath, func(message mqtt.Message) {
-		usecase.PublishDoorSwitchState(environments.DoorSwitchStateRequestPath)
 	})
 
 }

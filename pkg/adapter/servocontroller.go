@@ -3,9 +3,10 @@ package adapter
 import (
 	"Sakura-Pi-Node/pkg/config"
 	"fmt"
-	"github.com/stianeikeland/go-rpio/v4"
 	"os"
 	"time"
+
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 var (
@@ -104,9 +105,9 @@ func GetKeyState() bool {
 	return isOpen
 }
 
-// GetDoorState true = close, false = open
+// true = open, false = close
 func GetDoorState() bool {
-	return manageReedPin.Read() == 0
+	return manageReedPin.Read() == 1
 }
 
 func GetDoorSwitchState() bool {
