@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed usb inaccessibility issue when using docker.[`#48`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/48)
 - Fixed interval time. [`#59`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/59)
+- Fixed servo result. [`#61`](https://github.com/niwaniwa/Sakura-Pi-Node/issues/61)
 
 ### Removed
 
