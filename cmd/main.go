@@ -24,7 +24,7 @@ func main() {
 	environments = config.LoadEnvironments()
 	log.Print(environments)
 	adapter.InitializeServo(*environments)
-	adapter.InitializePasori()
+	adapter.InitializePasori(*environments)
 	adapter.InitializeLed(*environments)
 	infra.CreateMQTTClient(environments.TargetIP)
 

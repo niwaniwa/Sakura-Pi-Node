@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"Sakura-Pi-Node/pkg/config"
 	"github.com/bamchoh/pasori"
 	"time"
 )
@@ -15,8 +16,8 @@ const (
 	PID uint16 = 0x06C1 // RC-S380
 )
 
-func InitializePasori() {
-	go continuouslyReadID()
+func InitializePasori(config config.Config) {
+	go continuouslyReadID(config.PasoriIntervalTime)
 }
 
 func GetID() ([]byte, error) {
@@ -35,7 +36,7 @@ func PublishID(id []byte) {
 	IDEventChannel <- id
 }
 
-func continuouslyReadID() {
+func continuouslyReadID(interval int) {
 	for {
 		if allowRead {
 			id, err := GetID()
@@ -47,6 +48,6 @@ func continuouslyReadID() {
 		}
 
 		// ここで少し待機することでCPUの負荷を下げる
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(time.Duration(interval) * time.Millisecond)
 	}
 }
