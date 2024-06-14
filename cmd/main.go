@@ -65,7 +65,7 @@ func subscribeEvents() {
 			return
 		}
 		log.Println("Received key event. Key State:", key.Open)
-		usecase.KeyControl(key)
+		usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
 	})
 
 }

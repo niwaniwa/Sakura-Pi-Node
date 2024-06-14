@@ -21,7 +21,6 @@ func PublishDoorState(path string) {
 		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
-	// Jsonにしているが基本的に何でもよい
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		fmt.Println("Error marshalling data:", err)
@@ -29,6 +28,7 @@ func PublishDoorState(path string) {
 	}
 
 	infra.Publish(path, jsonData, 0)
+	fmt.Println("published door state: ", jsonData)
 }
 
 func PublishDoorSwitchState(path string) {
@@ -39,17 +39,16 @@ func PublishDoorSwitchState(path string) {
 		DeviceID:  os.Getenv(DeviceIDIdentifier),
 	}
 
-	// Jsonにしているが基本的に何でもよい
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		fmt.Println("Error marshalling data:", err)
 		return
 	}
-
 	infra.Publish(path, jsonData, 0)
+	fmt.Println("published door switch state: ", jsonData)
 }
 
-func KeyControl(key entity.KeyState) {
+func KeyControl(key entity.KeyState, publishPath string) {
 	done := make(chan bool)
 	if key.Open {
 		go adapter.OpenKey(done)
@@ -58,4 +57,7 @@ func KeyControl(key entity.KeyState) {
 	}
 	result := <-done
 	log.Println("Key process ", result)
+	if result {
+		PublishDoorSwitchState(publishPath)
+	}
 }
