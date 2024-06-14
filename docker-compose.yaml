@@ -12,6 +12,8 @@ services:
     networks:
       - sakura-network
     restart: always
+    environment:
+      device_id: "raspberry-pi"
 
 networks:
   sakura-network:
