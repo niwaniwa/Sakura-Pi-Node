@@ -36,8 +36,8 @@ func InitializeServo(config config.Config) {
 
 	managePWMPin = rpio.Pin(config.PwmPin) // PWM setup
 	managePWMPin.Mode(rpio.Pwm)
-	managePWMPin.Freq(50 * 100)
-	managePWMPin.DutyCycle(0, 100)
+	managePWMPin.Freq(50 * 1000)
+	managePWMPin.DutyCycle(0, 1000)
 	managePWMPin.High()
 
 	manageSwPin = rpio.Pin(config.SwPin)
