@@ -48,6 +48,23 @@ func PublishDoorSwitchState(path string) {
 	fmt.Println("published door switch state: ", jsonData)
 }
 
+func PublishDoorSwitchStateCustom(path string, isOpen bool) {
+	timestamp := time.Now()
+	data := entity.DoorSwitchState{
+		IsOpen:    isOpen,
+		Timestamp: timestamp,
+		DeviceID:  os.Getenv(DeviceIDIdentifier),
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		fmt.Println("Error marshalling data:", err)
+		return
+	}
+	infra.Publish(path, jsonData, 0)
+	fmt.Println("published door switch state: ", jsonData)
+}
+
 func KeyControl(key entity.KeyState, publishPath string) {
 	done := make(chan bool)
 	if key.Open {
@@ -58,6 +75,6 @@ func KeyControl(key entity.KeyState, publishPath string) {
 	result := <-done
 	log.Println("Key process ", result)
 	if result {
-		PublishDoorSwitchState(publishPath)
+		PublishDoorSwitchStateCustom(publishPath, key.Open)
 	}
 }
