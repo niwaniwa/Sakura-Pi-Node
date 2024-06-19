@@ -68,6 +68,11 @@ func subscribeEvents() {
 		if key.DeviceID != os.Getenv(usecase.DeviceIDIdentifier) {
 			return
 		}
+
+		if environments.ChangedKeyDirection {
+			key.Open = !key.Open
+		}
+
 		usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
 	})
 
