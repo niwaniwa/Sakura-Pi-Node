@@ -2,12 +2,14 @@ package usecase
 
 import (
 	"Sakura-Pi-Node/pkg/adapter"
+	"Sakura-Pi-Node/pkg/config"
 	"Sakura-Pi-Node/pkg/entity"
 	"Sakura-Pi-Node/pkg/infra"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -67,7 +69,16 @@ func PublishDoorSwitchStateCustom(path string, isOpen bool) {
 
 func KeyControl(key entity.KeyState, publishPath string) {
 	done := make(chan bool)
-	if key.Open {
+
+	isChanged, _ := strconv.ParseBool(os.Getenv(config.ChangedKeyDirection))
+
+	open := key.Open
+
+	if isChanged {
+		open = !open
+	}
+
+	if open {
 		go adapter.OpenKey(done)
 	} else {
 		go adapter.CloseKey(done)
