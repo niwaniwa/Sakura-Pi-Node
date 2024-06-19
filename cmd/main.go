@@ -69,10 +69,6 @@ func subscribeEvents() {
 			return
 		}
 
-		if environments.ChangedKeyDirection {
-			key.Open = !key.Open
-		}
-
 		usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
 	})
 
