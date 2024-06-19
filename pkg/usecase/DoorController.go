@@ -74,7 +74,5 @@ func KeyControl(key entity.KeyState, publishPath string) {
 	}
 	result := <-done
 	log.Println("Key process ", result)
-	if result {
-		PublishDoorSwitchStateCustom(publishPath, key.Open)
-	}
+	PublishDoorSwitchStateCustom(publishPath, key.Open)
 }
