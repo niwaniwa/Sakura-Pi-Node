@@ -65,6 +65,9 @@ func subscribeEvents() {
 			return
 		}
 		log.Println("Received key event. Key State:", key.Open)
+		if key.DeviceID != os.Getenv(usecase.DeviceIDIdentifier) {
+			return
+		}
 		usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
 	})
 
