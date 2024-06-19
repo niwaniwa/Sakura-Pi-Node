@@ -23,6 +23,7 @@ const (
 	DoorReedSwitchIdentifier              = "door_reed_switch"
 	RedLedIdentifier                      = "red_led"
 	GreenLedIdentifier                    = "green_led"
+	ChangedKeyDirection                   = "changed_key_direction"
 )
 
 type Config struct {
@@ -41,6 +42,7 @@ type Config struct {
 	DoorReedSwitch              int
 	RedLed                      int
 	GreenLed                    int
+	ChangedKeyDirection         bool
 }
 
 func LoadEnvironments() *Config {
@@ -57,6 +59,7 @@ func LoadEnvironments() *Config {
 	doorReedSwitch, _ := strconv.Atoi(os.Getenv(DoorReedSwitchIdentifier))
 	redLed, _ := strconv.Atoi(os.Getenv(RedLedIdentifier))
 	greenLed, _ := strconv.Atoi(os.Getenv(GreenLedIdentifier))
+	changedKeyDirection, _ := strconv.ParseBool(os.Getenv(ChangedKeyDirection))
 
 	return &Config{
 		PasoriIntervalTime:          pasoriIntervalTime,
@@ -74,6 +77,7 @@ func LoadEnvironments() *Config {
 		DoorReedSwitch:              doorReedSwitch,
 		RedLed:                      redLed,
 		GreenLed:                    greenLed,
+		ChangedKeyDirection:         changedKeyDirection,
 	}
 
 }
