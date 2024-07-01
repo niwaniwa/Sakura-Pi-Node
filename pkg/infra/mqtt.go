@@ -1,7 +1,6 @@
 package infra
 
 import (
-	"Sakura-Pi-Node/pkg/usecase"
 	"log"
 	"os"
 	"time"
@@ -11,6 +10,7 @@ import (
 
 const (
 	debugPrefixIdentifier = "prefix"
+	DeviceIDIdentifier    = "device_id"
 )
 
 var (
@@ -31,7 +31,7 @@ func CreateMQTTClient(targetIP string) {
 	options := mqtt.NewClientOptions().AddBroker(targetIP)
 	options.SetKeepAlive(60 * time.Second)
 	options.SetPingTimeout(10 * time.Second)
-	options.SetClientID(os.Getenv(usecase.DeviceIDIdentifier))
+	options.SetClientID(os.Getenv(DeviceIDIdentifier))
 	options.SetDefaultPublishHandler(defaultFunction)
 	client = mqtt.NewClient(options)
 
