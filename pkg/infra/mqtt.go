@@ -1,6 +1,7 @@
 package infra
 
 import (
+	"Sakura-Pi-Node/pkg/usecase"
 	"log"
 	"os"
 	"time"
@@ -28,8 +29,9 @@ func CreateMQTTClient(targetIP string) {
 	}
 
 	options := mqtt.NewClientOptions().AddBroker(targetIP)
-	options.SetKeepAlive(2 * time.Second)
-	options.SetPingTimeout(2 * time.Second)
+	options.SetKeepAlive(60 * time.Second)
+	options.SetPingTimeout(10 * time.Second)
+	options.SetClientID(os.Getenv(usecase.DeviceIDIdentifier))
 	options.SetDefaultPublishHandler(defaultFunction)
 	client = mqtt.NewClient(options)
 
