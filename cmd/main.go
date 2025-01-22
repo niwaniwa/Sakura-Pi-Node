@@ -26,10 +26,9 @@ func main() {
 	adapter.InitializeServo(*environments)
 	adapter.InitializePasori(*environments)
 	adapter.InitializeLed(*environments)
-	infra.CreateMQTTClient(environments.TargetIP)
-
-	subscribeEvents()
-
+	println("Initialized")
+	infra.CreateMQTTClient(environments.TargetIP, func(c mqtt.Client) { subscribeEvents() })
+	println("Initialized 2")
 	go listenForIDEvents()
 
 	start()

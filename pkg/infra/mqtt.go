@@ -10,6 +10,7 @@ import (
 
 const (
 	debugPrefixIdentifier = "prefix"
+	DeviceIDIdentifier    = "device_id"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 
 type MessageListener func(message mqtt.Message)
 
-func CreateMQTTClient(targetIP string) {
+func CreateMQTTClient(targetIP string, reconnectFunc func(c mqtt.Client)) {
 	getEnvironmentValues()
 	mqtt.ERROR = log.New(os.Stdout, debugPrefix, 0)
 
@@ -28,9 +29,14 @@ func CreateMQTTClient(targetIP string) {
 	}
 
 	options := mqtt.NewClientOptions().AddBroker(targetIP)
-	options.SetKeepAlive(2 * time.Second)
-	options.SetPingTimeout(2 * time.Second)
+	options.SetKeepAlive(60 * time.Second)
+	options.SetPingTimeout(10 * time.Second)
+	options.SetClientID(os.Getenv(DeviceIDIdentifier))
 	options.SetDefaultPublishHandler(defaultFunction)
+	options.SetAutoReconnect(true)
+
+	options.OnConnect = reconnectFunc
+
 	client = mqtt.NewClient(options)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
