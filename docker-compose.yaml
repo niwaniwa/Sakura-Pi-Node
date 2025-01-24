@@ -9,6 +9,7 @@ services:
       - "/dev/bus/usb:/dev/bus/usb"
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/mem:/dev/mem"
+      - /run/dbus:/run/dbus:ro
     networks:
       - sakura-network
     restart: always
