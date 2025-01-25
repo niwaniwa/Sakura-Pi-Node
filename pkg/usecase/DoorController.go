@@ -15,6 +15,7 @@ import (
 
 const DeviceIDIdentifier = "device_id"
 
+// リードSwitchを使用したもの。ドアが物理的に開いているか閉まっているかを記述
 func PublishDoorState(path string) {
 	timestamp := time.Now()
 	data := entity.DoorState{
@@ -33,6 +34,7 @@ func PublishDoorState(path string) {
 	fmt.Println("published door state: ", jsonData)
 }
 
+// Deprecated: 鍵ボックス内にあるSwitchがオンかどうか(現在使用不可)
 func PublishDoorSwitchState(path string) {
 	timestamp := time.Now()
 	data := entity.DoorSwitchState{
@@ -50,6 +52,7 @@ func PublishDoorSwitchState(path string) {
 	fmt.Println("published door switch state: ", jsonData)
 }
 
+// Deprecated: 鍵ボックス内にあるSwitchがオンかどうか(現在使用不可)
 func PublishDoorSwitchStateCustom(path string, isOpen bool) {
 	timestamp := time.Now()
 	data := entity.DoorSwitchState{
@@ -86,4 +89,18 @@ func KeyControl(key entity.KeyState, publishPath string) {
 	result := <-done
 	log.Println("Key process ", result)
 	PublishDoorSwitchStateCustom(publishPath, key.Open)
+}
+
+// Sesameによる鍵制御。
+func KeyControlBySesame(key entity.KeyState, publishPath string, sesame adapter.Sesame) {
+	done := make(chan bool)
+	open := key.Open
+
+	if open {
+		sesame.OpenKey(done)
+	} else {
+		sesame.CloseKey(done)
+	}
+	result := <-done
+	log.Println("Key process ", result)
 }
