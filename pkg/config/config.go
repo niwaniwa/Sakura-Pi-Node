@@ -15,6 +15,7 @@ const (
 	DoorSwitchStateRequestPathIdentifier  = "door_switch_state_request_path"
 	DoorSwitchStateResponsePathIdentifier = "door_switch_state_response_path"
 	targetIPIdentifier                    = "target_ip"
+	SesamePythonIp                        = "sesame_python_ip"
 	PasoriIntervalTimeIdentifier          = "pasori_interval_time"
 	DebugPrefixIdentifier                 = "debug_prefix"
 	PwmPinIdentifier                      = "pwm_pin"
@@ -36,6 +37,7 @@ type Config struct {
 	DoorSwitchStateResponsePath string
 	TargetIP                    string
 	DebugPrefix                 string
+	SesamePythonIp              string
 	PwmPin                      int
 	SwPin                       int
 	DoorSwPin                   int
@@ -70,6 +72,7 @@ func LoadEnvironments() *Config {
 		DoorSwitchStateRequestPath:  os.Getenv(DoorSwitchStateRequestPathIdentifier),
 		DoorSwitchStateResponsePath: os.Getenv(DoorSwitchStateResponsePathIdentifier),
 		TargetIP:                    os.Getenv(targetIPIdentifier),
+		SesamePythonIp:              os.Getenv(SesamePythonIp),
 		DebugPrefix:                 os.Getenv(DebugPrefixIdentifier),
 		PwmPin:                      pwmPin,
 		SwPin:                       swPin,

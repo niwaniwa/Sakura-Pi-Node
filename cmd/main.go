@@ -18,6 +18,7 @@ import (
 
 var (
 	environments *config.Config
+	sesame       adapter.Sesame
 )
 
 func main() {
@@ -26,6 +27,7 @@ func main() {
 	adapter.InitializeServo(*environments)
 	adapter.InitializePasori(*environments)
 	adapter.InitializeLed(*environments)
+	sesame = adapter.InitializeSesame(environments)
 	println("Initialized")
 	infra.CreateMQTTClient(environments.TargetIP, func(c mqtt.Client) { subscribeEvents() })
 	println("Initialized 2")
@@ -68,7 +70,9 @@ func subscribeEvents() {
 			return
 		}
 
-		usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
+		// servo ver
+		//usecase.KeyControl(key, environments.DoorSwitchStateResponsePath)
+		usecase.KeyControlBySesame(key, environments.DoorSwitchStateResponsePath, sesame)
 	})
 
 }
